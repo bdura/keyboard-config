@@ -18,3 +18,5 @@ the Ferris (34-key split).
   build pipeline, userspace mechanism, flashing, Ferris hardware, features.
 - [[rmk-firmware]] — exploration of RMK, a Rust/Embassy firmware studied as an
   alternative to QMK, with a [[rmk-porting-assessment]] for this keymap.
+- [[firmware-comparison]] — QMK versus RMK for this keymap: ease of use, features,
+  Nix compatibility.

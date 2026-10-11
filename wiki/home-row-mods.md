@@ -51,5 +51,11 @@ is also QMK's default. The QMK in `.firmware/` also offers home-row-mod helpers 
 are not used yet: Flow Tap, Chordal Hold and Speculative Hold ([[qmk-tap-hold]]).
 Caps Word capitalises tapped mod-tap letters correctly ([[qmk-caps-word]]).
 
+## See also
+
+Under RMK this setup maps to a morse profile
+`{ permissive_hold = true, hold_timeout = "200ms" }` ([[rmk-tap-hold]],
+[[rmk-porting-assessment]]).
+
 [^keymap]: [keyboards/ferris/keymaps/bdura/keymap.c](../../keyboards/ferris/keymaps/bdura/keymap.c)
 [^config]: [keyboards/ferris/keymaps/bdura/config.h](../../keyboards/ferris/keymaps/bdura/config.h)

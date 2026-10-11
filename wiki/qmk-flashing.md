@@ -51,8 +51,9 @@ That handedness flag only matters with `EE_HANDS` ([[split-handedness]])[^flashm
 qmk flash -kb ferris/sweep -km bdura   # then reset the plugged half
 ```
 
-Repeat for the other half. To enter the bootloader, see [[ferris-hardware]].
-Not yet tried from this repo; current blockers are listed in [[repo-lifecycle]].
+Repeat for the other half. To enter the bootloader, see [[ferris-hardware]]. Not
+yet tried from this repo. `nix run .` wraps this command ([[nix-firmware-package]]);
+the earlier build blockers are gone ([[repo-lifecycle]]).
 
 [^flashpy]: [lib/python/qmk/cli/flash.py](../.repos/qmk_firmware/lib/python/qmk/cli/flash.py)
 [^flashmk]: [platforms/avr/flash.mk](../.repos/qmk_firmware/platforms/avr/flash.mk),

@@ -21,9 +21,9 @@ needed `qmk setup --home ./.firmware/` and carried two blockers (see the end).
 ## 1. Environment
 
 `.envrc` holds `use flake`, so direnv enters the Nix dev shell on `cd`[^envrc].
-The shell provides `qmk` with avr-gcc 14 and the flashers, `qmkfmt`, `prek` and
-`dos2unix`, and exports `QMK_FIRMWARE_SRC` and `QMK_HOME` ([[nix-dev-shell]]).
-There is no per-machine setup step any more.
+The shell provides `qmk` with avr-gcc 15.3.0 (from `nixos-26.05`) and the flashers,
+`qmkfmt`, `prek` and `dos2unix`, and exports `QMK_FIRMWARE_SRC` and `QMK_HOME`
+([[nix-dev-shell]]). There is no per-machine setup step any more.
 
 ## 2. Edit
 
@@ -65,9 +65,9 @@ with a board attached.
 - **QMK:** `nix flake update qmk-firmware`, then rebuild. The next `make`
   recreates `.firmware/`. Check the breaking-changes changelog for renames
   ([[qmk-firmware-checkout]]).
-- **Toolchain:** `nix flake update nixpkgs`. Stay on a release branch whose avr-gcc
-  QMK supports (`nixos-26.05` → 15.3.0, current; `nixos-25.11` → 14.3.0, also fine;
-  unstable → 16.x, which breaks `-Werror`; `nixos-26.05` → 15.3.0, untested).
+- **Toolchain:** `nix flake update nixpkgs`. Stay on a release branch whose
+  avr-gcc QMK supports (`nixos-26.05` → 15.3.0, current; `nixos-25.11` → 14.3.0,
+  also fine; unstable → 16.x, which breaks `-Werror`).
 - **Shell tools:** `nix flake update nixpkgs-unstable`.
 
 ## History: blockers before 2026-10-11

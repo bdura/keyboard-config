@@ -27,4 +27,9 @@ Notes:
   in the keymap comment still shows a plain `⎵`[^keymap].
 - On the secondary layers all four thumb keys are `KC_NO`[^keymap].
 
+## See also
+
+Under RMK the layer-tap thumbs map directly; `MEH_T` has no shorthand and becomes
+`MT(Space, LCtrl | LShift | LAlt)` ([[rmk-porting-assessment]]).
+
 [^keymap]: [keyboards/ferris/keymaps/bdura/keymap.c](../../keyboards/ferris/keymaps/bdura/keymap.c)

@@ -13,10 +13,11 @@ split keyboards over serial or BLE, and runtime remapping through Vial (or its o
 experimental "Rynk" protocol). You configure a keyboard either with a declarative
 `keyboard.toml` or directly with the Rust API.
 
-The pages below describe `main` at `6e84c364` (2026-10-11), the commit the study
-clone in `.agent-workspace/.repos/rmk` is pinned to. This repo does not use RMK:
-it was explored as an alternative to [[qmk-firmware]]. See [[rmk-porting-assessment]]
-for what moving the bdura keymap would take.
+The pages below describe `main` at `6e84c364` (2026-10-11), the commit
+the study clone in `.agent-workspace/.repos/rmk` is pinned to. This repo
+does not use RMK: it was explored as an alternative to [[qmk-firmware]].
+See [[rmk-porting-assessment]] for what moving the bdura keymap would take,
+and [[firmware-comparison]] for a side-by-side with QMK.
 
 ## Identity
 

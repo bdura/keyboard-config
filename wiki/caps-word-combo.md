@@ -51,5 +51,10 @@ three-key chord on the top row is unlikely to fire while typing normally[^keymap
 - QMK's built-in alternative, `BOTH_SHIFTS_TURNS_ON_CAPS_WORD`, was not chosen
   ([[qmk-caps-word]]).
 
+## See also
+
+RMK matches combos the same way, so the QWERTY-only limit carries over
+([[rmk-combos]], [[rmk-caps-word]]).
+
 [^keymap]: [keyboards/ferris/keymaps/bdura/keymap.c](../../keyboards/ferris/keymaps/bdura/keymap.c)
 [^rules]: [keyboards/ferris/keymaps/bdura/rules.mk](../../keyboards/ferris/keymaps/bdura/rules.mk)
