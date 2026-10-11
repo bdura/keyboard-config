@@ -15,18 +15,25 @@ tags:
 
 ## clang-format
 
-`.clang-format` is based on Google style, with 4-space indents, no tabs, a
-1000-column limit (lines are effectively never wrapped), aligned consecutive
+`.clang-format` is based on Google style, with 4-space indents, no tabs,
+a 1000-column limit (lines are effectively never wrapped), aligned consecutive
 assignments and declarations, and includes left unsorted[^clangformat].
 
-The keymap array in `keymap.c` is wrapped in `// clang-format off` / `on` so
-the hand-aligned key grid is preserved[^keymap].
+The keymap array in `keymap.c` is wrapped in `// clang-format off` / `on`
+so the hand-aligned key grid is preserved[^keymap].
 
 ## qmkfmt
 
-`qmkfmt` (v0.2.0, built in [[nix-dev-shell]]) formats QMK keymap arrays into
-aligned grids; it was added in commit `9d106ad`[^flake]. How it is invoked
-(manually, editor, hook) is not recorded — _needs verification_.
+`qmkfmt` (v0.3.0, built in [[nix-dev-shell]]) formats QMK keymap arrays into
+aligned grids; it was added in commit `9d106ad`[^flake]. As of 2026-10-11,
+an uncommitted `prek.toml` runs it as a pre-commit hook on `keymap.c` files
+(`qmkfmt --no-clang-format`). The same file adds the generic builtin hooks
+and a `reflow` hook for markdown.
+
+## clangd and `compile_commands.json`
+
+`qmk compile --compiledb` writes `compile_commands.json` and copies it into the
+userspace root, where clangd picks it up ([[qmk-build-pipeline]]).
 
 ## clangd
 

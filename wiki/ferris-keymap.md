@@ -12,9 +12,11 @@ tags:
 
 # Ferris keymap (bdura)
 
-The only keymap in the repo lives in `keyboards/ferris/keymaps/bdura/`, split
-across three files: `keymap.c` (layers and combos), `config.h` (timing and
+The only keymap in the repo lives in `keyboards/ferris/keymaps/bdura/`,
+split across three files: `keymap.c` (layers and combos), `config.h` (timing and
 feature settings) and `rules.mk` (enabled QMK features)[^keymap][^config][^rules].
+It is built for `ferris/sweep` (Pro Micro, 34 keys; `LAYOUT` is an alias of
+`LAYOUT_split_3x5_2`); see [[ferris-hardware]].
 
 ## Layers
 
@@ -40,11 +42,11 @@ The keymap declares five layers, in this order[^keymap]:
 ## Conventions in keymap.c
 
 Base-layer rows are defined as preprocessor macros (`_________QWERTY_L1_________`
-etc.), one per half-row, and assembled through `LAYOUT_ferris_wrapper`, a
-variadic wrapper that lets the macros expand before `LAYOUT` sees them. The
-secondary layers call `LAYOUT` directly with literal keycodes. The keymap array
-sits between `// clang-format off` / `// clang-format on` so the hand-aligned
-grid survives formatting[^keymap] (see [[code-formatting]]).
+etc.), one per half-row, and assembled through `LAYOUT_ferris_wrapper`,
+a variadic wrapper that lets the macros expand before `LAYOUT` sees them.
+The secondary layers call `LAYOUT` directly with literal keycodes.
+The keymap array sits between `// clang-format off` / `// clang-format on`
+so the hand-aligned grid survives formatting[^keymap] (see [[code-formatting]]).
 
 [^keymap]: [keyboards/ferris/keymaps/bdura/keymap.c](../../keyboards/ferris/keymaps/bdura/keymap.c)
 [^config]: [keyboards/ferris/keymaps/bdura/config.h](../../keyboards/ferris/keymaps/bdura/config.h)
