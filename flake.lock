@@ -20,11 +20,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1765186076,
-        "narHash": "sha256-hM20uyap1a0M9d344I692r+ik4gTMyj60cQWO+hAYP8=",
+        "lastModified": 1791594108,
+        "narHash": "sha256-XK4KceonkwD8LuMAt/vNrz982mXJM5jeHAxMwsUXXAQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "addf7cf5f383a3101ecfba091b98d0a1263dc9b8",
+        "rev": "6510408d147d8c5e6d76043e899e9251756f6a75",
         "type": "github"
       },
       "original": {
@@ -37,16 +37,16 @@
     "qmkfmt-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1742470119,
-        "narHash": "sha256-QWyMH93a07/0CJ5CENiwVB4C4w1agowW+esW9Wx5vJk=",
+        "lastModified": 1767046019,
+        "narHash": "sha256-X2vXQqBUO+4H+sF+Tak6ksTE9Jv3o56fPImJhdH5x40=",
         "owner": "rcorre",
         "repo": "qmkfmt",
-        "rev": "caf37d554841fb550cf38368850b3bc4a9836290",
+        "rev": "d856c624672a999c7dbbc198bed4793f597d6949",
         "type": "github"
       },
       "original": {
         "owner": "rcorre",
-        "ref": "v0.2.0",
+        "ref": "v0.3.0",
         "repo": "qmkfmt",
         "type": "github"
       }
