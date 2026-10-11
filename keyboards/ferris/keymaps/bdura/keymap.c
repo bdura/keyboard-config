@@ -27,6 +27,15 @@ enum layers {
 #define ___BASE_LT___     LT(_SYMBOLS,KC_ESC), LT(_NUMBERS,KC_ENT)
 #define ___BASE_RT___     MEH_T(KC_SPC),         LT(_SYMBOLS,KC_BSPC)
 
+// U+I+O chord activates Caps Word (capitalises the next word then reverts).
+// Combos match the keycode at each position, so this only fires on QWERTY,
+// where the three keys are plain top-row keys.
+const uint16_t PROGMEM uio_combo[] = {KC_U, KC_I, KC_O, COMBO_END};
+
+combo_t key_combos[] = {
+    COMBO(uio_combo, CW_TOGG),
+};
+
 #define LAYOUT_ferris_wrapper(...)   LAYOUT(__VA_ARGS__)
 
 // clang-format off
@@ -61,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                              KC_NO, KC_NO, KC_NO,   KC_NO
     ),
     [_NUMBERS] = LAYOUT(
-        KC_NO,        KC_NO,        KC_NO,        KC_NO,        KC_NO,         KC_NO, KC_1, KC_2, KC_3, KC_MINUS,
+        KC_TAB,       KC_NO,        KC_NO,        KC_NO,        KC_NO,         KC_NO, KC_1, KC_2, KC_3, KC_MINUS,
         CMD_T(KC_NO), ALT_T(KC_NO), SFT_T(KC_NO), CTL_T(KC_NO), ALGR_T(KC_NO), KC_NO, KC_4, KC_5, KC_6, KC_0,
         KC_NO,        KC_NO,        KC_NO,        KC_NO,        KC_NO,         KC_NO, KC_7, KC_8, KC_9, KC_0,
                                                   KC_NO,        KC_NO,         KC_NO, KC_NO
