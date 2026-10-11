@@ -17,3 +17,6 @@ compile_commands.json
 
 # firmware
 .firmware/
+
+# nix build output
+result
