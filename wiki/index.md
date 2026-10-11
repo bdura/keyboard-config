@@ -11,7 +11,8 @@ the Ferris (34-key split).
 
 - [[ferris-keymap]] — the `bdura` keymap for the Ferris: layers, thumbs, mods,
   combos and firmware settings.
-- [[tooling]] — how the firmware is built and formatted: QMK userspace, Nix dev
-  shell, formatters, and the end-to-end [[repo-lifecycle]].
+- [[tooling]] — how the firmware is built and formatted: the reproducible
+  [[nix-firmware-package]], QMK userspace, Nix dev shell, formatters, and the
+  end-to-end [[repo-lifecycle]].
 - [[qmk-firmware]] — exploration of upstream QMK at the commit in `.firmware/`:
   build pipeline, userspace mechanism, flashing, Ferris hardware, features.

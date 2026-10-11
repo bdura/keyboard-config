@@ -25,9 +25,9 @@ so the hand-aligned key grid is preserved[^keymap].
 
 ## qmkfmt
 
-`qmkfmt` (v0.3.0, built in [[nix-dev-shell]]) formats QMK keymap arrays into
-aligned grids; it was added in commit `9d106ad`[^flake]. It runs as a pre-commit
-hook (see below).
+`qmkfmt` (v0.3.0, built from source by `nix/qmkfmt.nix`, see [[nix-dev-shell]])
+formats QMK keymap arrays into aligned grids; it was added in commit
+`9d106ad`[^flake]. It runs as a pre-commit hook (see below).
 
 ## prek hooks
 

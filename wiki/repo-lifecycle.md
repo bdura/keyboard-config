@@ -1,5 +1,5 @@
 ---
-summary: End-to-end workflow of this repo — environment, firmware checkout, edit, build, flash, update — with the blockers observed on 2026-10-11.
+summary: End-to-end workflow of this repo — dev shell, edit, iterate with make, build the reproducible hex with nix build, flash with nix run, update the pins.
 sources:
   - README.md
   - Makefile
@@ -15,84 +15,70 @@ tags:
 # Repo lifecycle
 
 How this repo is used from a fresh machine to a flashed keyboard. Each step links
-to the page with the details.
+to the page with the details. This replaces the pre-2026-10-11 workflow, which
+needed `qmk setup --home ./.firmware/` and carried two blockers (see the end).
 
 ## 1. Environment
 
 `.envrc` holds `use flake`, so direnv enters the Nix dev shell on `cd`[^envrc].
-The shell provides `qmk` (with the AVR/ARM toolchains and flashers), `qmkfmt`
-and `dos2unix` ([[nix-dev-shell]]). It provides tools, not firmware sources.
+The shell provides `qmk` with avr-gcc 14 and the flashers, `qmkfmt`, `prek` and
+`dos2unix`, and exports `QMK_FIRMWARE_SRC` and `QMK_HOME` ([[nix-dev-shell]]).
+There is no per-machine setup step any more.
 
-## 2. Firmware checkout (once per machine)
-
-```shell
-qmk setup --home ./.firmware/
-```
-
-This clones `qmk_firmware` into the gitignored `.firmware/` and records it as
-`user.qmk_home`[^readme]. The link between the repo and the checkout is that
-`qmk.ini` setting only. Details: [[qmk-firmware-checkout]].
-
-## 3. Edit
+## 2. Edit
 
 The keymap is in `keyboards/ferris/keymaps/bdura/` ([[ferris-keymap]]).
 Formatting tools: [[code-formatting]].
 
-## 4. Build
-
-Either of:
+## 3. Iterate
 
 ```shell
-make ferris/sweep:bdura                     # via the repo Makefile → .firmware
-qmk compile -kb ferris/sweep -km bdura
+make ferris/sweep:bdura                   # syncs .firmware/ if needed, then builds
+qmk compile -kb ferris/sweep -km bdura    # same, after a `make sync`
 ```
 
-The repo's `Makefile` forwards every target to `make -C <qmk_home>` with
-`QMK_USERSPACE` set to the repo[^makefile] ([[qmk-userspace]]). The firmware
-is copied to the repo root as `ferris_sweep_bdura.hex`, which is gitignored.
-`build_targets` in `qmk.json` is empty, so `qmk userspace-compile` builds
-nothing[^qmkjson]. Pipeline details: [[qmk-build-pipeline]]. Target hardware:
-[[ferris-hardware]].
+The first run copies the pinned QMK tree into `.firmware/` (about 13 s),
+later runs are incremental ([[qmk-userspace]]). The hex is copied to the repo
+root as `ferris_sweep_bdura.hex`, gitignored.
+
+## 4. Build the artefact
+
+```shell
+nix build              # result/ferris_sweep_bdura.hex
+nix build --rebuild    # fails if a second build differs byte for byte
+```
+
+See [[nix-firmware-package]]. Target hardware: [[ferris-hardware]].
 
 ## 5. Flash
 
 ```shell
-qmk flash -kb ferris/sweep -km bdura   # reset the plugged half when prompted
+nix run .    # builds, then `qmk flash` on the hex; reset the plugged half
 ```
 
 Repeat for the other half. Plug USB into the left half when using the board
-([[split-handedness]]). Details: [[qmk-flashing]].
+([[split-handedness]]). Mechanism: [[qmk-flashing]]. Not yet tried from this repo
+with a board attached.
 
 ## 6. Update
 
-Nothing automates updates:
+- **QMK:** `nix flake update qmk-firmware`, then rebuild. The next `make`
+  recreates `.firmware/`. Check the breaking-changes changelog for renames
+  ([[qmk-firmware-checkout]]).
+- **Toolchain:** `nix flake update nixpkgs`. Stay on a release branch whose avr-gcc
+  QMK supports (`nixos-26.05` → 15.3.0, current; `nixos-25.11` → 14.3.0, also fine;
+  unstable → 16.x, which breaks `-Werror`; `nixos-26.05` → 15.3.0, untested).
+- **Shell tools:** `nix flake update nixpkgs-unstable`.
 
-- **Firmware:** `git -C .firmware pull` + `make -C .firmware git-submodule`
-  ([[qmk-firmware-checkout]]). The QMK version is not pinned, so two machines can
-  build against different QMK versions.
-- **Toolchain:** `nix flake update`. This can change the compiler under an
-  unchanged QMK tree; see the blockers below.
+## History: blockers before 2026-10-11
 
-The README's stated plan is to package the firmware in the flake. That would pin
-the version and remove step 2.
+Both were removed by the reproducible-firmware plan:
 
-## Blockers observed on 2026-10-11
-
-- **`qmk_home` unset in the Nix shell.** The Nix `qmk` 1.2.0 reads `~/.config/qmk/`,
-  but the existing `qmk.ini` is in `~/Library/Application Support/qmk/`. So `make …`
-  stops with "Cannot determine qmk_firmware location" ([[qmk-firmware-checkout]]).
-- **avr-gcc 16.2.0 vs `-Werror`.** The current nixpkgs-unstable toolchain
-  rejects `tmk_core/protocol/lufa/lufa.c:327` (`unused-but-set-variable`).
-  `-e ALLOW_WARNINGS=yes` works around it ([[qmk-build-pipeline]]).
-
-Command that built successfully[^observed]:
-
-```shell
-QMK_HOME=$PWD/.firmware qmk compile -kb ferris/sweep -km bdura -e ALLOW_WARNINGS=yes
-```
+- `user.qmk_home` unset in the Nix shell, because the Nix `qmk` read
+  `~/.config/qmk/` while `qmk.ini` lived in `~/Library/Application Support/qmk/`.
+  `QMK_HOME` is now exported by the shell.
+- avr-gcc 16.2.0 rejecting `tmk_core/protocol/lufa/lufa.c:327` under `-Werror`,
+  worked around with `ALLOW_WARNINGS=yes`. The toolchain now comes from a stable
+  release branch (`nixos-25.11` first, `nixos-26.05` since the same day).
 
 [^envrc]: [.envrc](../../.envrc)
-[^readme]: [README.md](../../README.md)
-[^makefile]: [Makefile](../../Makefile)
-[^qmkjson]: [qmk.json](../../qmk.json)
-[^observed]: Observed on 2026-10-11 in the Nix dev shell; 27108/28672 bytes (94%).

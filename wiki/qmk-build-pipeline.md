@@ -110,11 +110,15 @@ Consequences:
 
 ## Warnings are errors
 
-QMK compiles with `-Werror` unless `ALLOW_WARNINGS=yes` is set. With the
-Nix shell's avr-gcc 16.2.0, building `ferris/sweep:bdura` on 2026-10-11
-failed on `tmk_core/protocol/lufa/lufa.c:327` (`unused-but-set-variable`).
-With `-e ALLOW_WARNINGS=yes` it built: 27108/28672 bytes (94%)[^observed].
-See [[repo-lifecycle]].
+QMK compiles with `-Werror` unless `ALLOW_WARNINGS=yes` is set. avr-gcc
+16.2.0 (nixpkgs-unstable) rejects `tmk_core/protocol/lufa/lufa.c:327`
+(`unused-but-set-variable`, a dead `ConfigSuccess` accumulator still present
+on upstream `master` as of 2026-10-11). avr-gcc 15.3.0 from `nixos-26.05` (and
+14.3.0 from `nixos-25.11`) compiles it cleanly, which is why the flake pins
+the toolchain there ([[nix-dev-shell]]). Observed on 2026-10-11: with gcc 16
+and `-e ALLOW_WARNINGS=yes` the build was 27108/28672 bytes at QMK `bd500ae`;
+with gcc 14 at QMK `7a1bbf3` it is 27496/28672 bytes; with gcc 15 it is 27290/28672
+bytes (95%)[^observed].
 
 [^makefile]: [Makefile](../.repos/qmk_firmware/Makefile), l.153–266 and l.380–403
 [^buildtargets]: [lib/python/qmk/build_targets.py](../.repos/qmk_firmware/lib/python/qmk/build_targets.py),
@@ -125,6 +129,5 @@ See [[repo-lifecycle]].
 [^dd]: [docs/data_driven_config.md](../.repos/qmk_firmware/docs/data_driven_config.md),
        l.5–11
 [^introspection]: [quantum/keymap_introspection.c](../.repos/qmk_firmware/quantum/keymap_introspection.c)
-[^observed]: Observed on 2026-10-11 by running
-             `QMK_HOME=$PWD/.firmware qmk compile -kb ferris/sweep -km bdura` in
-             the Nix dev shell, with and without `-e ALLOW_WARNINGS=yes`.
+[^observed]: Observed on 2026-10-11 in the Nix dev shell, before and after the
+             reproducible-firmware plan.

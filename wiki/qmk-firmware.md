@@ -13,10 +13,12 @@ Python build turns any `keyboard:keymap` pair into a flashable `.hex`, `.bin`
 or `.uf2`. Features such as combos, Caps Word and tap-hold options are opt-in,
 and only enabled ones are compiled in.
 
-This repo builds against QMK as an external userspace ([[qmk-userspace]]).
-The pages below describe QMK at the commit checked out in `.firmware/`
-(`master`, `bd500ae092`, 2026-03-19; newest tag `0.32.5`). The study clone in
-`.agent-workspace/.repos/qmk_firmware` is pinned to the same commit.
+This repo builds against QMK as an external userspace ([[qmk-userspace]]). The pages
+below describe QMK at `master` `bd500ae092` (2026-03-19; newest tag `0.32.5`),
+the commit the study clone in `.agent-workspace/.repos/qmk_firmware` is pinned to.
+Since 2026-10-11 the flake pins a newer commit, `7a1bbf37` (2026-10-02),
+see [[nix-firmware-package]]; the study clone has not been moved yet, and nothing
+described here is known to differ.
 
 ## Top-level layout
 

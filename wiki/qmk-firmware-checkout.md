@@ -1,5 +1,5 @@
 ---
-summary: How a qmk_firmware checkout is created, located (qmk_home), kept in sync (submodules) and updated (master/develop cycle), including the config-location mismatch seen with the Nix qmk CLI.
+summary: How QMK locates its tree (qmk_home, QMK_HOME), submodules and SKIP_GIT, the master/develop release cycle, and how this repo now pins the tree through the flake instead of qmk setup.
 sources:
   - .agent-workspace/.repos/qmk_firmware/docs/cli.md
   - .agent-workspace/.repos/qmk_firmware/docs/breaking_changes.md
@@ -19,34 +19,26 @@ Part of [[qmk-firmware]]. In this repo the checkout is `.firmware/`
 
 ## Creating and locating it
 
-`qmk setup [-H <path>]` clones `qmk/qmk_firmware`[^cli]. This repo's README runs
-it as `qmk setup --home ./.firmware/`[^readme].
+Upstream's way is `qmk setup [-H <path>]`, which clones `qmk/qmk_firmware`[^cli]
+and records the location as `user.qmk_home` in `qmk.ini` (or reads `QMK_HOME` from
+the environment). `setup` and the `QMK_HOME` handling belong to the separate `qmk`
+CLI package, not `qmk_firmware`; the CLI first looks for a tree above the cwd,
+then `qmk_home`, then `QMK_HOME`.
 
-- **Where it is recorded:** the location is stored in `user.qmk_home` in `qmk.ini`,
-  or given through the `QMK_HOME` environment variable.
-- **Where `setup` lives:** `setup` and the `QMK_HOME` handling belong to the
-  separate `qmk` CLI package, not `qmk_firmware`. Not verified here.
-- **Who reads it:** this repo's `Makefile` reads `qmk_home` only through
-  `qmk config -ro user.qmk_home`, so `QMK_HOME` in the environment does not help
-  it[^makefile].
+This repo no longer uses `qmk setup`. Since 2026-10-11 the tree is a flake
+input pinned in `flake.lock`, and `.firmware/` is a plain copy of that store
+path made by `make sync` ([[qmk-userspace]], [[nix-firmware-package]]).
+The dev shell exports `QMK_HOME=$PWD/.firmware` for the CLI ([[nix-dev-shell]]).
 
-The result is a plain git clone of `master`, not a submodule. It is not pinned
-by anything in this repo.
+### Config location mismatch (historical, observed 2026-10-11)
 
-### Config location mismatch (observed 2026-10-11)
-
-The Nix shell's `qmk` 1.2.0 reports `user.qmk_home=None`. Its platformdirs config
-directory is `~/.config/qmk/`, which doesn't exist. Meanwhile a `qmk.ini` with
-the right `qmk_home` exists in `~/Library/Application Support/qmk/`[^observed].
-
-As a result, `make ferris/sweep:bdura` stops with "Cannot determine qmk_firmware
-location". The cause is _needs verification_: the file may have been written by
-a different `qmk` build, or the config path may have changed between versions.
-Workarounds:
-
-- for the `qmk` CLI, `QMK_HOME=$PWD/.firmware`;
-- for the Makefile, re-run `qmk config user.qmk_home=$PWD/.firmware` with the Nix
-  `qmk`.
+The Nix shell's `qmk` 1.2.0 reported `user.qmk_home=None`: its platformdirs
+config directory was `~/.config/qmk/`, while a `qmk.ini` with the right
+`qmk_home` existed in `~/Library/Application Support/qmk/`[^observed].
+The old Makefile read `qmk_home` only through `qmk config -ro user.qmk_home`,
+so `make ferris/sweep:bdura` stopped with "Cannot determine qmk_firmware location".
+Exporting `QMK_HOME` from the shell and dropping the `qmk config` lookup from the
+Makefile made this moot. The cause of the path difference was never verified.
 
 ## Submodules
 
@@ -59,9 +51,10 @@ Workarounds:
 - `SKIP_GIT=yes` skips all of this. A tree that is not a git repo sets it
   automatically[^qmkmake].
 
-This matters for packaging the firmware in Nix ([[nix-dev-shell]]). The submodules
-would have to be vendored and `SKIP_GIT` set, because the build otherwise calls
-git (inferred).
+For the Nix package this is handled by fetching the input with `submodules=1`
+and by the tree not being a git repo, which sets `SKIP_GIT` automatically
+([[nix-firmware-package]]). Verified on 2026-10-11: the sandboxed build runs
+without git.
 
 ## Release cycle and updating
 
@@ -78,13 +71,12 @@ merge. That date has passed, so the checkout probably predates that merge.
 To update the checkout:
 
 ```shell
-git -C .firmware pull
-make -C .firmware git-submodule
+nix flake update qmk-firmware
 ```
 
-Then rebuild, and check the breaking-changes changelog for keyboard or keycode
-renames. After an update, re-pin the study clone and refresh [[qmk-firmware]]
-(`commit-hash`).
+Then rebuild (`nix build`, or `make …`, which resyncs `.firmware/`), and check
+the breaking-changes changelog for keyboard or keycode renames. After an update,
+re-pin the study clone and refresh [[qmk-firmware]] (`commit-hash`).
 
 ## Version strings
 
@@ -92,8 +84,6 @@ The firmware embeds both `qmk_firmware`'s version and the userspace's own
 `git describe` (`QMK_USERSPACE_VERSION`).
 
 [^cli]: [docs/cli.md](../.repos/qmk_firmware/docs/cli.md), l.18
-[^readme]: [README.md](../../README.md)
-[^makefile]: [Makefile](../../Makefile)
 [^submodule]: [lib/python/qmk/cli/git/submodule.py](../.repos/qmk_firmware/lib/python/qmk/cli/git/submodule.py),
               l.32–37
 [^qmkmake]: [Makefile](../.repos/qmk_firmware/Makefile), l.22–29, l.387–391
