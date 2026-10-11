@@ -1,7 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
     qmkfmt-src = {
       url = "github:rcorre/qmkfmt?ref=v0.3.0";
       flake = false;
@@ -12,9 +11,15 @@
     self,
     nixpkgs,
     qmkfmt-src,
-    flake-utils,
-  }:
-    flake-utils.lib.eachDefaultSystem (
+  }: let
+    forAllSystems = nixpkgs.lib.genAttrs [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+  in {
+    devShells = forAllSystems (
       system: let
         pkgs = import nixpkgs {
           inherit system;
@@ -27,7 +32,7 @@
           doCheck = false;
         };
       in {
-        devShells.default = pkgs.mkShell {
+        default = pkgs.mkShell {
           buildInputs = with pkgs; [
             qmk
             qmkfmt
@@ -36,4 +41,5 @@
         };
       }
     );
+  };
 }
