@@ -58,6 +58,10 @@ QMK takes each key's hand from the first of these that is defined:
 The Sweep's layout has a clear gap between halves, so the guess should split
 cleanly (inferred, not tested).
 
+## See also
+
+RMK's equivalent, with a mapping of these options, is [[rmk-tap-hold]].
+
 [^h]: [quantum/action_tapping.h](../.repos/qmk_firmware/quantum/action_tapping.h),
       l.22–27
 [^docs]: [docs/tap_hold.md](../.repos/qmk_firmware/docs/tap_hold.md), l.414–543,

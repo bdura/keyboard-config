@@ -44,6 +44,11 @@ definition"[^docs].
 You don't need to set `COMBO_COUNT`: the core computes it through keymap
 introspection ([[qmk-build-pipeline]]).
 
+## See also
+
+RMK uses the same keycode-identity matching, plus a per-combo layer:
+see [[rmk-combos]].
+
 [^quantum]: [quantum/quantum.c](../.repos/qmk_firmware/quantum/quantum.c), l.280
 [^combo]: [quantum/process_keycode/process_combo.c](../.repos/qmk_firmware/quantum/process_keycode/process_combo.c),
           l.280–287, l.577–586

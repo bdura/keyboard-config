@@ -69,6 +69,11 @@ pins. Flashing is covered in [[qmk-flashing]].
 controller, e.g. `rp2040_ce`, `kb2040`, `elite_pi`, `proton_c`. Use it as
 `qmk compile -e CONVERT_TO=rp2040_ce …`.
 
+## See also
+
+Under RMK there is no converter: RP2040 or nRF52840 GPIO names are written directly,
+and the AVR Pro Micro is not supported at all ([[rmk-hardware-support]]).
+
 [^sweep]: [keyboards/ferris/sweep/keyboard.json](../.repos/qmk_firmware/keyboards/ferris/sweep/keyboard.json)
 [^defaults]: [data/mappings/defaults.hjson](../.repos/qmk_firmware/data/mappings/defaults.hjson),
              l.68–72

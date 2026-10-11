@@ -47,6 +47,10 @@ which can surprise users of non-US OS layouts[^docs].
 - `DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD`.
 - Call `caps_word_on()` from code.
 
+## See also
+
+RMK's version, with fixed rules and a fixed timeout, is [[rmk-caps-word]].
+
 [^docs]: [docs/features/caps_word.md](../.repos/qmk_firmware/docs/features/caps_word.md),
          l.20–88, l.151–170
 [^process]: [quantum/process_keycode/process_caps_word.c](../.repos/qmk_firmware/quantum/process_keycode/process_caps_word.c),

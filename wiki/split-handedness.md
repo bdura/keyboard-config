@@ -51,6 +51,11 @@ To plug in either side instead:
 2. flash each half once with `-bl avrdude-split-left` and `-bl avrdude-split-right`
    respectively ([[qmk-flashing]]).
 
+## See also
+
+RMK has no runtime handedness or master election: roles are fixed by which binary
+each half gets ([[rmk-split]]).
+
 [^splitutil]: [quantum/split_common/split_util.c](../.repos/qmk_firmware/quantum/split_common/split_util.c),
               l.141–191
 [^docs]: [docs/features/split_keyboard.md](../.repos/qmk_firmware/docs/features/split_keyboard.md),

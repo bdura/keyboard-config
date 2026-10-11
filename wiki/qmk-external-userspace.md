@@ -99,6 +99,11 @@ This doesn't affect this repo: the in-tree `keyboards/ferris/keymaps/` has only
 - **Keymaps only:** only keymaps, layouts, users and modules can be overlaid.
   Keyboard definitions must live in the firmware tree[^path].
 
+## See also
+
+In RMK every keyboard is its own Cargo project, so there is nothing to overlay
+([[rmk-build-and-flash]]).
+
 [^docs]: [docs/newbs_external_userspace.md](../.repos/qmk_firmware/docs/newbs_external_userspace.md)
 [^userspace]: [lib/python/qmk/userspace.py](../.repos/qmk_firmware/lib/python/qmk/userspace.py)
 [^makefile]: [Makefile](../.repos/qmk_firmware/Makefile), l.41–44 and l.441–448
