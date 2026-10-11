@@ -1,5 +1,5 @@
 ---
-summary: A D+K chord toggles QMK Caps Word; work in progress, and per QMK source the combo does not fire on QWERTY (only on the unreachable Colemak-DH layer).
+summary: A U+I+O chord toggles QMK Caps Word; it fires on QWERTY only, because combos match the full keycode at each key position.
 sources:
   - keyboards/ferris/keymaps/bdura/keymap.c
   - keyboards/ferris/keymaps/bdura/rules.mk
@@ -7,51 +7,49 @@ tags:
   - keymap
   - combo
   - caps-word
-  - wip
 ---
 
-# Caps Word on D+K
+# Caps Word combo (U+I+O)
 
-Pressing D and K together sends `CW_TOGG`, which toggles QMK's Caps Word:
-letters are capitalised until a word-breaking key (e.g. space) is typed[^keymap].
-Both features are enabled in `rules.mk` (`COMBO_ENABLE`, `CAPS_WORD_ENABLE`)[^rules].
+Pressing U, I and O together sends `CW_TOGG`, which toggles QMK's Caps Word:
+letters are capitalised until a word-breaking key (e.g. space) is typed[^keymap]
+([[qmk-caps-word]]). Both features are enabled in `rules.mk` (`COMBO_ENABLE`,
+`CAPS_WORD_ENABLE`)[^rules].
 
 ```c
-const uint16_t PROGMEM dk_combo[] = {KC_D, KC_K, COMBO_END};
+const uint16_t PROGMEM uio_combo[] = {KC_U, KC_I, KC_O, COMBO_END};
 
 combo_t key_combos[] = {
-    COMBO(dk_combo, CW_TOGG),
+    COMBO(uio_combo, CW_TOGG),
 };
 ```
 
-The feature lives on the `feat/dk-caps-word` branch, introduced by commit
-`de11e0a` ("wip: add caps word on D+K combo").
+Developed on branch `feat/uio-caps-word` (renamed from `feat/dk-caps-word`).
+Commit `3c2a967` moved the combo from D+K to U+I+O. It compiles for `ferris/sweep`
+(with `-e ALLOW_WARNINGS=yes`, see [[repo-lifecycle]]), but has not been tested
+on hardware yet.
 
-## Why D+K
+## Why not D+K
 
-On QWERTY, D and K are the left and right home-row Shift keys ([[home-row-mods]]).
-Chording both Shifts to get "caps" is a common home-row-mods idiom.
+The first version (commit `de11e0a`) chorded D+K, the two QWERTY home-row
+Shift keys ([[home-row-mods]]). Its comment claimed bare `KC_D`/`KC_K` would
+match "regardless of which home-row mod wrapper (SFT_T, RSFT_T, …) is active".
+That was wrong: combos compare the full 16-bit keycode at the pressed position,
+so `{KC_D, KC_K}` never matched `SFT_T(KC_D)`/`RSFT_T(KC_K)` on QWERTY
+([[qmk-combos]]). It would only have fired on Colemak-DH, where D and K are plain
+keys, and that layer cannot be reached ([[base-layers]]).
 
-## Open question: does it fire on QWERTY?
+U, I and O are plain top-row keys on QWERTY, so they need no mod-tap wrappers, and a
+three-key chord on the top row is unlikely to fire while typing normally[^keymap].
 
-The source comment says the combo uses bare keycodes "so the combo fires regardless
-of which home-row mod wrapper (SFT_T, RSFT_T, …) is active on that key"[^keymap].
+## Limits
 
-The comment is wrong. The QMK source in `.firmware/` (`bd500ae`) confirms it:
-combos compare the full 16-bit keycode at the pressed position with `==`,
-so `{KC_D, KC_K}` does not match `SFT_T(KC_D)` and `RSFT_T(KC_K)` on QWERTY
-([[qmk-combos]]). It will match on Colemak-DH, where D and K are bare bottom-row
-keys ([[base-layers]]), but that layer cannot currently be activated.
-Not yet tested on hardware.
-
-Possible fixes (details in [[qmk-combos]]):
-
-- list the mod-tap keycodes in the combo;
-- define one combo per base layer;
-- use `COMBO_ONLY_FROM_LAYER`.
-
-Adding `COMBO_MUST_TAP_PER_COMBO` keeps holding D+K usable as two Shifts. QMK also
-has a built-in alternative, `BOTH_SHIFTS_TURNS_ON_CAPS_WORD` ([[qmk-caps-word]]).
+- QWERTY only. On Colemak-DH, I and O are home-row mods (`ALT_T(KC_I)`,
+  `RCMD_T(KC_O)`), so the combo does not match there; the source comment says
+  so[^keymap]. `COMBO_ONLY_FROM_LAYER` would make it positional across layers
+  ([[qmk-combos]]).
+- QMK's built-in alternative, `BOTH_SHIFTS_TURNS_ON_CAPS_WORD`, was not chosen
+  ([[qmk-caps-word]]).
 
 [^keymap]: [keyboards/ferris/keymaps/bdura/keymap.c](../../keyboards/ferris/keymaps/bdura/keymap.c)
 [^rules]: [keyboards/ferris/keymaps/bdura/rules.mk](../../keyboards/ferris/keymaps/bdura/rules.mk)

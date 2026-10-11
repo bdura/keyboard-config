@@ -35,7 +35,7 @@ The keymap declares five layers, in this order[^keymap]:
 - [[home-row-mods]] — the GUI/Alt/Shift/Ctrl/AltGr mod-taps on the home row,
   and the tap-hold timing that supports them.
 - [[thumb-cluster]] — the four thumb keys shared by both base layers.
-- [[caps-word-combo]] — D+K combo toggling Caps Word (work in progress).
+- [[caps-word-combo]] — U+I+O combo toggling Caps Word (QWERTY only).
 - [[keymap-config]] — the rest of `config.h`: mouse keys, split USB detection,
   RGB underglow.
 

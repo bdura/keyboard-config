@@ -1,5 +1,5 @@
 ---
-summary: A Nix flake provides a dev shell with qmk, qmkfmt (built from source) and dos2unix; direnv loads it automatically.
+summary: A Nix flake provides a dev shell with qmk, qmkfmt (built from source), dos2unix and prek; direnv loads it automatically.
 sources:
   - flake.nix
   - .envrc
@@ -20,8 +20,7 @@ used `flake-utils` before commit `4656c36` ("simplify flake"). It contains:
   from `github:rcorre/qmkfmt` at tag `v0.3.0`, with tests disabled
   (`doCheck = false`)[^flake]. See [[code-formatting]].
 - `dos2unix`.
-- `prek` — the pre-commit runner for `prek.toml`. This is an uncommitted change
-  as of 2026-10-11.
+- `prek` — runs the git hooks in `prek.toml` ([[code-formatting]]).
 
 Because nixpkgs-unstable is followed, `nix flake update` can upgrade the compiler
 under an unchanged QMK tree. avr-gcc 16.2.0 currently breaks the build under

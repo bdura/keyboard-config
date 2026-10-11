@@ -51,7 +51,8 @@ Since `build_targets` is empty, `qmk userspace-compile` has nothing to build yet
 Running `qmk userspace-add -kb ferris/sweep -km bdura` would add the target. Building
 goes through `qmk compile -kb ferris/sweep -km bdura` or `make ferris/sweep:bdura`.
 The target is `ferris/sweep`, which compiles at 94% of flash ([[ferris-hardware]]).
-As of 2026-10-11 the build needs two workarounds; see [[repo-lifecycle]].
+As of 2026-10-11 the build needs two workarounds; see [[repo-lifecycle]] and the
+workspace issue `firmware-build-fails-lufa-werror`.
 
 Built artifacts (`*.hex`, `*.bin`, `*.uf2`) are gitignored[^gitignore].
 QMK copies each build's firmware into the userspace root, which is why these
