@@ -48,8 +48,15 @@ shell, syncs `.firmware/`, and hands every other goal to `make -C .firmware`.
 ## Code Map
 
 ```text
-├── flake.nix                 # Inputs, firmware packages, flash apps, dev shell
+├── flake.nix                 # Inputs and wiring only; calls into nix/
 ├── flake.lock                # Pins QMK, both nixpkgs and qmkfmt
+├── nix/
+│   ├── targets.nix           # qmk.json → list of {keyboard, keymap, env, name, target}
+│   ├── userspace.nix         # fileset of what the build may see from this repo
+│   ├── firmware.nix          # One target → one derivation whose output is the hex
+│   ├── flash.nix             # One firmware package → one `qmk flash` app
+│   ├── devshell.nix          # The dev shell; `qmk` from the same nixpkgs as firmware.nix
+│   └── qmkfmt.nix            # qmkfmt built from source (not in nixpkgs)
 ├── qmk.json                  # Userspace manifest; build_targets drives the flake
 ├── Makefile                  # Lazy .firmware/ sync, then forwards to QMK's make
 ├── keyboards/ferris/keymaps/bdura/
@@ -62,13 +69,19 @@ shell, syncs `.firmware/`, and hands every other goal to `make -C .firmware`.
 └── .firmware/                # Gitignored working copy of the pinned QMK tree
 ```
 
-### flake.nix
+### flake.nix and nix/
 
-Holds the only description of how a target is built. The derivation copies the
-userspace into a writable directory because QMK copies the firmware back into it.
-`HOME` is pointed at the sandbox's temp dir because the `qmk` CLI writes config
-there. The userspace source is filtered to `keyboards/`, `layouts/`, `users/`
-and `qmk.json`, so documentation edits do not rebuild the firmware.
+`flake.nix` declares inputs and instantiates the modules once per system with
+`callPackage`, so each module's dependencies are explicit in its argument
+set. `targets.nix` and `userspace.nix` are system-independent and evaluated
+once. `firmware.nix` holds the only description of how a target is built:
+the derivation copies the userspace into a writable directory because QMK copies
+the firmware back into it, and points `HOME` at the sandbox's temp dir because
+the `qmk` CLI writes config there. The userspace is filtered to `keyboards/`,
+`layouts/`, `users/` and `qmk.json`, so documentation edits do not rebuild the
+firmware. `flash.nix` reads the hex path from the package's `passthru`, so the app
+and the package cannot disagree. The shell module is named `devshell.nix` because
+a global git ignore drops any `shell.nix`, and flakes only see tracked files.
 
 ### Makefile
 
@@ -81,7 +94,9 @@ is not a git repository, which makes QMK skip its submodule sync on its own.
 - **Change the keymap:** edit under `keyboards/ferris/keymaps/bdura/`,
   run `make ferris/sweep:bdura`, flash with `nix run .` when happy.
 - **Add a target:** `qmk userspace-add -kb <kb> -km <km>`, or edit `qmk.json`.
-  The flake picks it up with no other change.
+  The flake picks it up with no other change. The first entry is `default`.
+- **Change how a target is built:** `nix/firmware.nix`. Check with
+  `nix path-info --derivation .#default` whether the derivation changed.
 - **Update QMK:** `nix flake update qmk-firmware`, rebuild, check the
   breaking-changes notes for renamed keyboards or keycodes.
 - **Update the toolchain:** `nix flake update nixpkgs`. Stay on a release branch
