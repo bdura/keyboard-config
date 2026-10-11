@@ -36,7 +36,10 @@
           buildInputs = with pkgs; [
             qmk
             qmkfmt
+
             dos2unix
+
+            prek
           ];
         };
       }

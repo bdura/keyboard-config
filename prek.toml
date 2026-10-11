@@ -1,0 +1,31 @@
+[[repos]]
+repo = "builtin"
+hooks = [
+  { id = "trailing-whitespace" },
+  { id = "end-of-file-fixer" },
+  { id = "mixed-line-ending" },
+  { id = "check-merge-conflict" },
+  { id = "check-added-large-files" },
+  { id = "check-case-conflict" },
+  { id = "check-toml" },
+  { id = "check-yaml" },
+  { id = "detect-private-key" },
+  { id = "check-executables-have-shebangs" },
+]
+
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "reflow"
+name = "reflow markdown"
+entry = "reflow"
+language = "system"
+types = ["markdown"]
+
+[[repos.hooks]]
+id = "qmkfmt"
+name = "qmkfmt"
+entry = "sh -c 'for f in \"$@\"; do qmkfmt --no-clang-format \"$f\" || exit 1; done' --"
+language = "system"
+files = "keymap\\.c$"
