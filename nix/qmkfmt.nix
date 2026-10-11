@@ -1,12 +1,17 @@
-# qmkfmt is not in nixpkgs; build it from the pinned source.
+# Not in nixpkgs.
 {
   rustPlatform,
-  src,
+  fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qmkfmt";
-  version = "v0.3.0";
-  inherit src;
+  version = "0.3.0";
+  src = fetchFromGitHub {
+    owner = "rcorre";
+    repo = "qmkfmt";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X2vXQqBUO+4H+sF+Tak6ksTE9Jv3o56fPImJhdH5x40=";
+  };
   cargoHash = "sha256-+0tFSSZR5tBUC0WbJ1Oc3b6n5q3JkaeMnL9bzL6B3zo=";
   doCheck = false;
-}
+})

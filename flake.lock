@@ -51,29 +51,11 @@
         "url": "https://github.com/qmk/qmk_firmware"
       }
     },
-    "qmkfmt-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1767046019,
-        "narHash": "sha256-X2vXQqBUO+4H+sF+Tak6ksTE9Jv3o56fPImJhdH5x40=",
-        "owner": "rcorre",
-        "repo": "qmkfmt",
-        "rev": "d856c624672a999c7dbbc198bed4793f597d6949",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rcorre",
-        "ref": "v0.3.0",
-        "repo": "qmkfmt",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "qmk-firmware": "qmk-firmware",
-        "qmkfmt-src": "qmkfmt-src"
+        "qmk-firmware": "qmk-firmware"
       }
     }
   },

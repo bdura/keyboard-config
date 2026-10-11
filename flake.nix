@@ -7,10 +7,6 @@
       url = "git+https://github.com/qmk/qmk_firmware?ref=master&submodules=1";
       flake = false;
     };
-    qmkfmt-src = {
-      url = "github:rcorre/qmkfmt?ref=v0.3.0";
-      flake = false;
-    };
   };
 
   outputs = {
@@ -18,7 +14,6 @@
     nixpkgs,
     nixpkgs-unstable,
     qmk-firmware,
-    qmkfmt-src,
   }: let
     lib = nixpkgs.lib;
 
@@ -44,7 +39,7 @@
         qmkFirmware = qmk-firmware;
       };
       mkFlashApp = pkgs.callPackage ./nix/flash.nix {};
-      qmkfmt = unstable.callPackage ./nix/qmkfmt.nix {src = qmkfmt-src;};
+      qmkfmt = unstable.callPackage ./nix/qmkfmt.nix {};
 
       firmwares = map (t: lib.nameValuePair t.name (buildFirmware t)) targets;
       flashApps = map (f: lib.nameValuePair "flash-${f.name}" (mkFlashApp f.value)) firmwares;

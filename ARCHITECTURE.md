@@ -49,14 +49,14 @@ shell, syncs `.firmware/`, and hands every other goal to `make -C .firmware`.
 
 ```text
 ├── flake.nix                 # Inputs and wiring only; calls into nix/
-├── flake.lock                # Pins QMK, both nixpkgs and qmkfmt
+├── flake.lock                # Pins QMK and both nixpkgs
 ├── nix/
 │   ├── targets.nix           # qmk.json → list of {keyboard, keymap, env, name, target}
 │   ├── userspace.nix         # fileset of what the build may see from this repo
 │   ├── firmware.nix          # One target → one derivation whose output is the hex
 │   ├── flash.nix             # One firmware package → one `qmk flash` app
 │   ├── devshell.nix          # The dev shell; `qmk` from the same nixpkgs as firmware.nix
-│   └── qmkfmt.nix            # qmkfmt built from source (not in nixpkgs)
+│   └── qmkfmt.nix            # qmkfmt from a pinned GitHub tag (not in nixpkgs)
 ├── qmk.json                  # Userspace manifest; build_targets drives the flake
 ├── Makefile                  # Lazy .firmware/ sync, then forwards to QMK's make
 ├── keyboards/ferris/keymaps/bdura/
