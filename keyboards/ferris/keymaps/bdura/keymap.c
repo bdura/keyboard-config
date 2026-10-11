@@ -27,13 +27,13 @@ enum layers {
 #define ___BASE_LT___     LT(_SYMBOLS,KC_ESC), LT(_NUMBERS,KC_ENT)
 #define ___BASE_RT___     MEH_T(KC_SPC),         LT(_SYMBOLS,KC_BSPC)
 
-// D+K chord activates Caps Word (capitalises the next word then reverts).
-// These reference the bare keycodes so the combo fires regardless of which
-// home-row mod wrapper (SFT_T, RSFT_T, …) is active on that key.
-const uint16_t PROGMEM dk_combo[] = {KC_D, KC_K, COMBO_END};
+// U+I+O chord activates Caps Word (capitalises the next word then reverts).
+// Combos match the keycode at each position, so this only fires on QWERTY,
+// where the three keys are plain top-row keys.
+const uint16_t PROGMEM uio_combo[] = {KC_U, KC_I, KC_O, COMBO_END};
 
 combo_t key_combos[] = {
-    COMBO(dk_combo, CW_TOGG),
+    COMBO(uio_combo, CW_TOGG),
 };
 
 #define LAYOUT_ferris_wrapper(...)   LAYOUT(__VA_ARGS__)
