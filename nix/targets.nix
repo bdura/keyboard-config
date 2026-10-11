@@ -1,8 +1,5 @@
-# Build targets, read from the userspace manifest (qmk.json).
-#
-# Each entry of `build_targets` is `[keyboard, keymap]` or
-# `[keyboard, keymap, {env}]` (userspace manifest v1.1), where `env` holds extra
-# make variables. Returns one attribute set per target.
+# `build_targets` entries are `[keyboard, keymap]` or, in manifest v1.1,
+# `[keyboard, keymap, {env}]` where `env` holds extra make variables.
 {manifest}: let
   json = builtins.fromJSON (builtins.readFile manifest);
 

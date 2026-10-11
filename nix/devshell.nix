@@ -1,7 +1,5 @@
-# The dev shell.
-#
 # `qmk` must come from the same nixpkgs as `firmware.nix`, so the iteration
-# loop and `nix build` share one compiler. The other tools are shell-only.
+# loop and `nix build` share one compiler.
 {
   mkShell,
   qmk,

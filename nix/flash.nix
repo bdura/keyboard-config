@@ -1,7 +1,3 @@
-# A flake app that flashes a firmware package built by `firmware.nix`.
-#
-# Extra arguments are passed to `qmk flash`. Split boards are flashed once per
-# half; the Sweep has no EE_HANDS, so both halves take the same hex.
 {
   qmk,
   writeShellScript,

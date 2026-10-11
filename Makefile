@@ -7,13 +7,11 @@ ifeq ($(QMK_USERSPACE),)
     QMK_USERSPACE := $(shell pwd)
 endif
 
-# The pinned qmk_firmware tree, exported by the flake's dev shell.
 ifeq ($(QMK_FIRMWARE_SRC),)
     $(error QMK_FIRMWARE_SRC is not set; enter the dev shell first (`nix develop` or direnv))
 endif
 
 # A writable copy of the pinned tree, so that QMK's incremental build works.
-# The marker records which store path the copy came from.
 QMK_FIRMWARE_ROOT := $(QMK_USERSPACE)/.firmware
 SYNC_MARKER := $(QMK_FIRMWARE_ROOT)/.nix-source
 

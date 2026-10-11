@@ -1,7 +1,4 @@
-# The userspace overlay as seen by the firmware build.
-#
-# Only the directories QMK overlays, plus the manifest, so that README or flake
-# edits do not invalidate the firmware derivation.
+# Only what QMK overlays, so README or flake edits do not rebuild the firmware.
 {
   lib,
   root,

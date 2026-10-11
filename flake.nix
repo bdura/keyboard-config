@@ -1,12 +1,8 @@
 {
   inputs = {
-    # Stable channel for the toolchain: `qmk` brings avr-gcc 14, which QMK
-    # upstream tests against. Unstable's avr-gcc 16 breaks `-Werror` on QMK core.
+    # Stable for the toolchain: unstable's avr-gcc 16 breaks `-Werror` on QMK core.
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    # Unstable for shell-only tools, where freshness matters more than stability.
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # The QMK tree, with every submodule, pinned by flake.lock.
-    # Update with `nix flake update qmk-firmware`.
     qmk-firmware = {
       url = "git+https://github.com/qmk/qmk_firmware?ref=master&submodules=1";
       flake = false;
@@ -53,7 +49,6 @@
       firmwares = map (t: lib.nameValuePair t.name (buildFirmware t)) targets;
       flashApps = map (f: lib.nameValuePair "flash-${f.name}" (mkFlashApp f.value)) firmwares;
 
-      # The first manifest entry is also `default`.
       withDefault = pairs:
         lib.listToAttrs pairs
         // lib.optionalAttrs (pairs != []) {default = (builtins.head pairs).value;};
