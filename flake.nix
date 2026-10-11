@@ -1,7 +1,7 @@
 {
   inputs = {
     # Stable for the toolchain: unstable's avr-gcc 16 breaks `-Werror` on QMK core.
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     qmk-firmware = {
       url = "git+https://github.com/qmk/qmk_firmware?ref=master&submodules=1";
