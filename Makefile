@@ -7,10 +7,23 @@ ifeq ($(QMK_USERSPACE),)
     QMK_USERSPACE := $(shell pwd)
 endif
 
-QMK_FIRMWARE_ROOT = $(shell qmk config -ro user.qmk_home | cut -d= -f2 | sed -e 's@^None$$@@g')
-ifeq ($(QMK_FIRMWARE_ROOT),)
-    $(error Cannot determine qmk_firmware location. `qmk config -ro user.qmk_home` is not set)
+ifeq ($(QMK_FIRMWARE_SRC),)
+    $(error QMK_FIRMWARE_SRC is not set; enter the dev shell first (`nix develop` or direnv))
 endif
 
-%:
-	+$(MAKE) -C $(QMK_FIRMWARE_ROOT) $(MAKECMDGOALS) QMK_USERSPACE=$(QMK_USERSPACE)
+# A writable copy of the pinned tree, so that QMK's incremental build works.
+QMK_FIRMWARE_ROOT := $(QMK_USERSPACE)/.firmware
+SYNC_MARKER := $(QMK_FIRMWARE_ROOT)/.nix-source
+
+.PHONY: sync
+sync:
+	if [ "$$(cat $(SYNC_MARKER) 2>/dev/null)" != "$(QMK_FIRMWARE_SRC)" ]; then \
+	    echo "Syncing $(QMK_FIRMWARE_ROOT) from $(QMK_FIRMWARE_SRC)"; \
+	    rm -rf "$(QMK_FIRMWARE_ROOT)"; \
+	    cp -R "$(QMK_FIRMWARE_SRC)" "$(QMK_FIRMWARE_ROOT)"; \
+	    chmod -R u+w "$(QMK_FIRMWARE_ROOT)"; \
+	    printf '%s' "$(QMK_FIRMWARE_SRC)" > "$(SYNC_MARKER)"; \
+	fi
+
+%: sync
+	+$(MAKE) -C $(QMK_FIRMWARE_ROOT) $@ QMK_USERSPACE=$(QMK_USERSPACE)

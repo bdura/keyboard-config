@@ -27,7 +27,7 @@ enum layers {
 #define ___BASE_LT___     LT(_SYMBOLS,KC_ESC), LT(_NUMBERS,KC_ENT)
 #define ___BASE_RT___     MEH_T(KC_SPC),         LT(_SYMBOLS,KC_BSPC)
 
-// U+I+O chord activates Caps Word (capitalises the next word then reverts).
+// U+I+O chord toggles Caps Word.
 // Combos match the keycode at each position, so this only fires on QWERTY,
 // where the three keys are plain top-row keys.
 const uint16_t PROGMEM uio_combo[] = {KC_U, KC_I, KC_O, COMBO_END};
