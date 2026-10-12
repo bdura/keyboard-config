@@ -11,6 +11,17 @@ nix build          # result/ferris_sweep_bdura.hex, from pinned inputs
 nix run .          # build, then `qmk flash` it; repeat once per half
 ```
 
+Flashing needs write access to the bootloader's serial port (`/dev/ttyACM*`,
+owned by `root:dialout`). Without it, `qmk flash` reports that the Caterina
+bootloader "was found but is not writable". On NixOS:
+
+```nix
+hardware.keyboard.qmk.enable = true;               # QMK udev rules
+users.users.<you>.extraGroups = [ "dialout" ];     # optional, direct port access
+```
+
+Rebuild, then replug the keyboard (and log back in if you added `dialout`).
+
 `nix build --rebuild` rebuilds and fails if the output differs from the one already
 in the store. It is the check that the firmware is a pure function of `flake.lock`.
 
